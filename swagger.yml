@@ -1,0 +1,162 @@
+swagger: '2.0'
+info:
+  title: MEVN Blog API
+  description: This is a test swagger file.
+  version: '1.0'
+host: localhost:8080
+basePath: /blog
+schemes:
+  - http
+
+tags:
+  - name: 讀取接口
+    description: 定義讀取資料 API  
+  - name: 寫入接口
+    description: 定義寫入資料 API  
+paths:
+  /posts:
+    get:
+      tags:
+        - "讀取接口"
+      summary: 讀取文章列表
+      responses:
+        200:
+          description: Fetched posts successfully
+          schema:
+            $ref: "#/definitions/PostList"
+        500:
+          description: Server Error
+    post:
+      tags:
+        - "寫入接口"
+      summary: 新增文章
+      consumes:
+        - "multipart/form-data"
+      parameters:
+        - in: formData
+          name: image
+          type: file
+          required: true
+          description: The file to upload.
+        - in: formData
+          name: title
+          type: string
+          required: true
+          description: 文章標題
+        - in: formData  
+          name: content
+          type: string
+          required: true
+          description: 文章內容
+      responses:
+        201:
+          description: Post created successfully.
+          schema:
+            $ref: "#/definitions/Post"
+        422:
+          description: Validation Failed.            
+        500:
+          description: Server Error    
+      deprecated: false            
+  /posts/{postId}: 
+    get:
+      tags:
+        - "讀取接口"
+      summary: 依照文章 Id 讀取該文章資料  
+      parameters:
+        - in: path
+          name: postId
+          description: 文章 id
+          type: string
+          required: true
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: Post fetched.
+          schema:
+            $ref: "#/definitions/Post"  
+        404:
+          description: Could not find post.            
+        500:
+          description: Oops, Something went wrong.                
+    delete:
+      tags:
+        - "寫入接口"
+      summary: 依照文章 Id 刪除該文章資料  
+      parameters:
+        - in: path
+          name: postId
+          description: 文章 id
+          type: string
+          required: true
+      responses:
+        200:
+          description: Deleted post.
+        404:
+          description: Could not find post.            
+        500:
+          description: Oops, Something went wrong.                       
+    put:
+      tags:
+        - "寫入接口"
+      summary: 依照文章 Id 修改該文章資料  
+      consumes:
+        - "application/json"
+      parameters:
+        - in: path
+          name: postId
+          description: 文章 id
+          type: string
+          required: true      
+        - in: body
+          name: body
+          description: 文章資料
+          required: true 
+          schema:
+            $ref: "#/definitions/PostData"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: 文章修改成功
+          schema:
+            $ref: "#/definitions/Post"
+        422:
+          description: Validation Failed. || No image provided.             
+        404:
+          description: Could not find post.               
+        500:
+          description: Server Error    
+      deprecated: false    
+            
+definitions:
+  PostList:
+    type: object
+    items: 
+      $ref: "#/definitions/Post"
+  Post:
+    description: 文章資料庫資料
+    type: object
+    properties: 
+      title:
+        type: string
+        description: 文章標題
+      imageUrl:
+        type: string
+        description: 文章圖片        
+      content:
+        type: string
+        description: 文章內容
+  PostData:
+    description: 文章輸入資料
+    properties:
+        title:
+          type: string
+          description: 文章標題    
+        image:
+          type: string
+          description: 文章圖片.
+        content:
+          type: string
+          description: 文章內容 (使用 editor.js 產出)

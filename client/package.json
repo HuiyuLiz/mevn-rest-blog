@@ -1,0 +1,52 @@
+{
+  "name": "mevn-rest-blog",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@editorjs/editorjs": "^2.19.0",
+    "@editorjs/header": "^2.6.0",
+    "@editorjs/link": "^2.3.1",
+    "@editorjs/list": "^1.6.0",
+    "@editorjs/paragraph": "^2.8.0",
+    "axios": "^0.20.0",
+    "bootstrap": "^4.5.3",
+    "core-js": "^3.6.5",
+    "dayjs": "^1.9.4",
+    "jquery": "^3.5.1",
+    "parse-json": "^5.1.0",
+    "popper.js": "^1.16.1",
+    "vee-validate": "^4.0.0-beta.12",
+    "vue": "^3.0.0",
+    "vue-axios": "^3.1.1",
+    "vue-editor-js": "^2.0.1",
+    "vue-router": "^4.0.0-0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "^4.5.8",
+    "@vue/cli-plugin-vuex": "^4.5.8",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.11.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^7.1.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^10.0.3"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
