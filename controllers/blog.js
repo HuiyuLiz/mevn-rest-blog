@@ -57,14 +57,32 @@ function deletePost(req, res, next) {
 }
 
 function getPosts(req, res, next) {
-	Post.find()
-		.then(posts=>{
+	const currentPage = req.query.page ||1
+	const perPageItem = 5
+	let totalItem
+
+	Post
+		.find()
+		.countDocuments()
+		.then(total => {
+			totalItem = total
+			return Post.find()
+				.skip((currentPage - 1) * perPageItem)
+				.limit(perPageItem)
+		})
+		.then(posts => {
+			if (!posts) {
+				const error = new Error('Could not find posts.')
+				error.statusCode = 404
+				throw error
+			}
 			res.status(200).json({
 				message: 'Fetched posts successfully.',
-				posts: posts
+				posts: posts,
+				totalItem: totalItem
 			})
-		})
-		.catch(error=>{
+		})			
+		.catch(error => {
 			if (!error.statusCode) {
 				error.statusCode = 500
 			}

@@ -1,6 +1,6 @@
 <template>
   <div class="col-lg-8 single-content">
-    <h1 class="mb-4">{{ title }}</h1>
+    <h1 class="mb-4">{{ title }}-{{postId}}</h1>
     <div class="post-meta d-flex mb-5">
       <div class="bio-pic mr-3">
         <img

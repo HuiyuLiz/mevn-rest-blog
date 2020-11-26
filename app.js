@@ -43,8 +43,10 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/images', express.static(path.join(__dirname,'images')))
 app.use(multer({ storage: storage, fileFilter: fileFilter }).single('image'))
+
 // routes
 app.use('/blog', require('./routes/blog'))
+app.use('/auth', require('./routes/auth'))
 
 app.use((error,req,res,next)=>{
 	const status = error.statusCode || 500

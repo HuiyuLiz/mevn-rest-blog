@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <div class="pt-5 pb-5">
+  <div class="pt-5 pb-5">
       <div class="container">
         <div class="row">
           <template v-if="post !== null">
@@ -12,7 +11,7 @@
             :createdAt="post.createdAt"
           ></SinglePostItem>
           </template>
-          <p class="col h4" v-else>{{ message }}</p>
+          <p class="col h4" v-else>{{ errorMessage }}</p>
           <div class="col-lg-3 ml-auto">
             <div class="section-title">
               <h2>Recent Posts</h2>
@@ -27,7 +26,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -48,7 +46,7 @@ export default {
   data () {
     return {
       post: null,
-      message: ''
+      errorMessage: ''
     }
   },
   watch: {
@@ -68,7 +66,7 @@ export default {
         .catch((error) => {
           console.log(error)
           this.post = null
-          this.message = error.response.data.message
+          this.errorMessage = error.response.data.message
         })
     }
   },

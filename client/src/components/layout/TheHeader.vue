@@ -14,7 +14,7 @@
           <div class="col-12 col-lg-6 d-flex align-items-center">
             <div class="d-flex flex-column">
               <a href="index.html" class="nav-logo text-dark h2">Tech notes.</a>
-            <p>轉職前端工程師中，學習的一些紀錄。</p>
+              <p>轉職前端工程師中，學習的一些紀錄。</p>
             </div>
             <a
               href="#"
@@ -45,7 +45,14 @@
                     >
                   </li>
                   <li>
-                    <router-link class="nav-link text-left" to="/posts"
+                    <router-link
+                      class="nav-link text-left"
+                      :to="{
+                        name: 'Posts',
+                        query: {
+                          page: 1,
+                        },
+                      }"
                       >Posts</router-link
                     >
                   </li>
@@ -54,7 +61,7 @@
             </div>
             <div class="search-form d-inline-block">
               <div class="d-flex">
-                <button type="submit" class="btn btn-dark py-2 px-3">
+                <router-link to="/login" class="btn btn-dark py-2 px-3">
                   <span class="">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +75,7 @@
                         d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
                       /></svg
                   ></span>
-                </button>
+                </router-link>
               </div>
             </div>
           </div>
@@ -85,5 +92,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

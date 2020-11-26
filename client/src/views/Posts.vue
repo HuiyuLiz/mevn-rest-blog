@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-lg-8 mr-md-auto">
           <div class="section-title">
-            <span class="caption d-block small">Categories</span>
+            <span class="caption d-block small">Categories page:{{ page }} totalPosts:{{ totalPosts}}</span>
             <h2>Tech</h2>
           </div>
           <!-- Toggle Modal Button-->
@@ -16,21 +16,25 @@
             Add New Post
           </button>
           <!-- Post Item -->
-          <PostItem
-            v-for="post in posts"
-            class="row mb-5"
-            :key="post._id"
-            :title="post.title"
-            :content="post.content"
-            :image-url="post.imageUrl"
-            :creator="post.creator"
-            :createdAt="post.createdAt"
-            :id="post._id"
-            @get-post="getPost"
-            @editing-post="toggleModal(true, post)"
-            @delete-post="deletePost"
-          >
-          </PostItem>
+          <template v-if="posts && posts.length>0 && !isLoading">
+            <PostItem
+              v-for="post in posts"
+              class="row mb-5"
+              :key="post._id"
+              :title="post.title"
+              :content="post.content"
+              :image-url="post.imageUrl"
+              :creator="post.creator"
+              :createdAt="post.createdAt"
+              :id="post._id"
+              @get-post="getPost"
+              @editing-post="toggleModal(true, post)"
+              @delete-post="deletePost"
+            >
+            </PostItem>
+          </template>
+          <p class="h3 text-dark" v-else-if="!isLoading"> No posts found.</p>
+          <p class="h6 text-dark">{{ errorMessage }}</p>
         </div>
         <!-- Post Summary Item -->
         <div class="col-lg-3 mt-5 mt-lg-0">
@@ -45,7 +49,7 @@
           </p>
         </div>
       </div>
-      <BasePagination></BasePagination>
+      <BasePagination :totalPosts="totalPosts"></BasePagination>
       <!-- Modal -->
       <div
         ref="modal"
@@ -104,7 +108,7 @@
                         @change="onFileChange"
                       />
                     </div>
-                    <span class="text-danger" v-if="!isUploaded && !isEditing"
+                    <span class="text-danger" v-if="!isUploaded"
                       >No image provided.</span
                     >
                   </div>
@@ -171,15 +175,14 @@ export default {
   name: 'Posts',
   data () {
     return {
-      posts: [],
       isEditing: false,
       isUploaded: false,
       blocksLength: null,
       editingPost: {},
-      editingTitle: '',
       editingImageUrl: '',
+      imagePreviewSrc: '',
       editingBlocks: {},
-      imagePreviewSrc: ''
+      errorMessage: ''
     }
   },
   components: {
@@ -189,11 +192,38 @@ export default {
     Field,
     Form
   },
+  watch: {
+    page (value) {
+      if (this.$route.name !== 'Posts') return
+      if (!value || value === undefined) {
+        this.$router.push({ name: 'Posts', query: { page: 1 } })
+      } else {
+        this.getPosts(value)
+      }
+    }
+  },
   mounted () {
-    this.getPosts()
+    if (this.$route.fullPath === '/posts/' || this.$route.fullPath === '/posts') {
+      this.$router.push({ name: 'Posts', query: { page: 1 } })
+      this.getPosts(1)
+    } else {
+      this.getPosts(this.page)
+    }
     this.createEditor()
   },
   computed: {
+    totalPosts () {
+      return this.$store.getters['posts/totalPosts']
+    },
+    page () {
+      return this.$route.query.page
+    },
+    posts () {
+      return this.$store.getters['posts/posts']
+    },
+    isLoading () {
+      return this.$store.getters.isLoading
+    },
     isValidation () {
       if (
         this.editingPost.title !== '' &&
@@ -210,7 +240,8 @@ export default {
     toggleModal (isEditing, post) {
       this.$refs.file.value = ''
       this.editingImageUrl = ''
-      console.log('toggleModal', this.$refs.file.value)
+      this.isUploaded = true
+      this.titleRequired = false
       if (!isEditing) {
         this.editingPost = {}
         this.isEditing = false
@@ -219,14 +250,13 @@ export default {
       } else {
         this.editingPost = Object.assign({}, post)
         this.isEditing = true
-        this.imagePreviewSrc = `${process.env.VUE_APP_API_URL}/` + this.editingPost.imageUrl
+        this.imagePreviewSrc =
+          `${process.env.VUE_APP_API_URL}/` + this.editingPost.imageUrl
         const { content } = this.editingPost
         const editingContent = parseJson(content)
         const { blocks } = editingContent
         this.editingBlocks = { blocks }
         this.refreshContent(this.editingBlocks)
-
-        console.log()
       }
       $('#modal').modal('show')
     },
@@ -236,32 +266,29 @@ export default {
     getPost (postId) {
       this.$router.push({ name: 'SinglePost', params: { postId: postId } })
     },
-    getPosts () {
-      this.$http
-        .get(`${process.env.VUE_APP_API_URL}/blog/posts`)
-        .then((response) => {
-          if (response.status !== 200) {
-            throw new Error('Failed to fetch posts.')
-          }
-          this.posts = response.data ? response.data.posts : []
-          console.log(this.posts)
-        })
-        .catch((error) => {
-          console.log('error', error)
-        })
+    async getPosts (page = 1) {
+      this.$store.commit('changeLoading', true)
+      try {
+        await this.$store.dispatch('posts/GET_POSTS', page)
+      } catch (error) {
+        if (error.response.status === 404) {
+          this.errorMessage = 'Could not find posts.'
+        } else {
+          this.errorMessage = 'Something went wrong.'
+        }
+      }
+      this.$store.commit('changeLoading', false)
     },
-    deletePost (id) {
-      this.$http
-        .delete(`${process.env.VUE_APP_API_URL}/blog/posts/${id}`)
-        .then((response) => {
-          if (response.status !== 200) {
-            throw new Error('Deleting a post failed.')
-          }
-          this.posts = this.posts.filter(post => post._id !== id)
-        })
-        .catch((error) => {
-          console.log('error', error)
-        })
+    async deletePost (id) {
+      try {
+        this.$store.dispatch('posts/DELETE_POST', id)
+      } catch (error) {
+        if (error.response.status === 404) {
+          this.errorMessage = 'Deleting a post failed.'
+        } else {
+          this.errorMessage = 'Something went wrong.'
+        }
+      }
     },
     async createPost () {
       const content = await window.editor.save()
@@ -293,7 +320,7 @@ export default {
       formData.append('title', newPost.title)
       formData.append('content', JSON.stringify(newPost.content))
       formData.append('image', newPost.imageUrl)
-      console.log('newPost', newPost)
+
       this.$http({
         method: method,
         url: url,
@@ -303,15 +330,35 @@ export default {
         }
       })
         .then((response) => {
-          if (response.status !== 200 && response.status !== 201) {
+          if (response.status === 200 || response.status === 201) {
+            const updatePosts = [...this.posts]
+            if (this.isEditing) {
+              const updatePost = {
+                _id: response.data.post._id,
+                title: response.data.post.title,
+                content: response.data.post.content,
+                imageUrl: response.data.post.imageUrl,
+                creator: response.data.post.creator,
+                createdAt: response.data.post.createdAt
+              }
+              const index = this.posts.findIndex(post => post._id === updatePost._id)
+              updatePosts[index] = updatePost
+            } else {
+              updatePosts.push(response.data.post)
+            }
+            this.$store.commit('posts/setPosts', updatePosts)
+          } else {
             throw new Error('Creating or editing a post failed.')
           }
-          this.getPosts()
+          // this.getPosts()
           $('#modal').modal('hide')
         })
         .catch((error) => {
-          console.log('error', error.response.data.message)
+          if (error) {
+            this.errorMessage = 'Something went wrong.'
+          }
           $('#modal').modal('hide')
+          console.log(error)
         })
     },
     async clearContent () {
@@ -351,17 +398,14 @@ export default {
           window.editor.save().then((savedData) => {
             const { blocks } = savedData
             vm.blocksLength = blocks.length
-            console.log(
-              'onReady', data,
-              vm.editingBlocks
-            )
+            // console.log('onReady', data, vm.editingBlocks)
           })
         },
         onChange: function () {
           window.editor.save().then((savedData) => {
             const { blocks } = savedData
             vm.blocksLength = blocks.length
-            console.log('onChange', blocks, savedData, vm.blocksLength)
+            // console.log('onChange', blocks, savedData, vm.blocksLength)
           })
         }
       })
@@ -388,12 +432,12 @@ export default {
           this.imagePreviewSrc = src
         } catch (error) {
           this.imagePreviewSrc = ''
+          this.isUploaded = false
           console.log(error)
         }
       } else {
         this.isUploaded = false
       }
-      console.log('this.editingImageUrl', this.editingImageUrl)
     },
     loadFile (file) {
       return new Promise((resolve, reject) => {
