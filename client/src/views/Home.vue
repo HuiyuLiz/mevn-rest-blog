@@ -1,263 +1,133 @@
 <template>
-      <div class="site-wrap">
-      <div class="py-5">
-        <div class="owl-carousel hero-slide owl-style pt-5">
-          <div class="pb-5">
-            <div class="container">
-              <div class="half-post-entry d-block d-lg-flex bg-light">
-                <div
-                  class="img-bg"
-                  style="
-                    background-image: url('https://images.unsplash.com/photo-1593642531955-b62e17bdaa9c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80/photo-1593642531955-b62e17bdaa9c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80');
-                  "
-                ></div>
-                <div class="contents">
-                  <span class="caption">Editor's Pick</span>
-                  <h2>
-                    <a href="blog-single.html"
-                      >News Needs to Meet Its Audiences Where They Are</a
-                    >
-                  </h2>
-                  <p class="mb-3">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Voluptate vero obcaecati natus adipisci necessitatibus eius,
-                    enim vel sit ad reiciendis. Enim praesentium magni delectus
-                    cum, tempore deserunt aliquid quaerat culpa nemo veritatis,
-                    iste adipisci excepturi consectetur doloribus aliquam
-                    accusantium beatae?
-                  </p>
-
-                  <div class="post-meta">
-                    <span class="d-block"
-                      ><a href="#">Dave Rogers</a> in <a href="#">Food</a></span
-                    >
-                    <span class="date-read"
-                      >Jun 14 <span class="mx-1">&bullet;</span> 3 min read
-                      <span class="icon-star2"></span
-                    ></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pb-5">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-9">
-              <div class="section-title">
-                <h2>Recent News</h2>
-              </div>
-              <div class="post-entry-2 d-flex">
-                <div
-                  class="thumbnail order-md-2"
-                  style="
-                    background-image: url('https://images.unsplash.com/photo-1593642531955-b62e17bdaa9c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80');
-                  "
-                ></div>
-                <div class="contents order-md-1 pl-0">
-                  <h2>
-                    <a href="blog-single.html"
-                      >News Needs to Meet Its Audiences Where They Are</a
-                    >
-                  </h2>
-                  <p class="mb-3">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Eligendi temporibus praesentium neque, voluptatum quam
-                    quibusdam.
-                  </p>
-                  <div class="post-meta">
-                    <span class="d-block"
-                      ><a href="#">Dave Rogers</a> in <a href="#">News</a></span
-                    >
-                    <span class="date-read"
-                      >Jun 14 <span class="mx-1">&bullet;</span> 3 min read
-                      <span class="icon-star2"></span
-                    ></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="post-entry-2 d-flex">
-                <div
-                  class="thumbnail order-md-2"
-                  style="
-                    background-image: url('https://images.unsplash.com/photo-1593642531955-b62e17bdaa9c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80');
-                  "
-                ></div>
-                <div class="contents order-md-1 pl-0">
-                  <h2>
-                    <a href="blog-single.html"
-                      >News Needs to Meet Its Audiences Where They Are</a
-                    >
-                  </h2>
-                  <p class="mb-3">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Eligendi temporibus praesentium neque, voluptatum quam
-                    quibusdam.
-                  </p>
-                  <div class="post-meta">
-                    <span class="d-block"
-                      ><a href="#">Dave Rogers</a> in <a href="#">News</a></span
-                    >
-                    <span class="date-read"
-                      >Jun 14 <span class="mx-1">&bullet;</span> 3 min read
-                      <span class="icon-star2"></span
-                    ></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="post-entry-2 d-flex">
-                <div
-                  class="thumbnail order-md-2"
-                  style="
-                    background-image: url('https://images.unsplash.com/photo-1593642531955-b62e17bdaa9c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80');
-                  "
-                ></div>
-                <div class="contents order-md-1 pl-0">
-                  <span class="caption mb-4 d-block">Editor's Pick</span>
-                  <h2>
-                    <a href="blog-single.html"
-                      >News Needs to Meet Its Audiences Where They Are</a
-                    >
-                  </h2>
-                  <p class="mb-3">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Eligendi temporibus praesentium neque, voluptatum quam
-                    quibusdam.
-                  </p>
-                  <div class="post-meta">
-                    <span class="d-block"
-                      ><a href="#">Dave Rogers</a> in <a href="#">News</a></span
-                    >
-                    <span class="date-read"
-                      >Jun 14 <span class="mx-1">&bullet;</span> 3 min read
-                      <span class="icon-star2"></span
-                    ></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="section-title">
-                <h2>Popular Posts</h2>
-              </div>
-
-              <div class="trend-entry d-flex">
-                <div class="number align-self-start">01</div>
-                <div class="trend-contents">
-                  <h2>
-                    <a href="blog-single.html"
-                      >News Needs to Meet Its Audiences Where They Are</a
-                    >
-                  </h2>
-                  <div class="post-meta">
-                    <span class="d-block"
-                      ><a href="#">Dave Rogers</a> in <a href="#">News</a></span
-                    >
-                    <span class="date-read"
-                      >Jun 14 <span class="mx-1">&bullet;</span> 3 min read
-                      <span class="icon-star2"></span
-                    ></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="trend-entry d-flex">
-                <div class="number align-self-start">02</div>
-                <div class="trend-contents">
-                  <h2>
-                    <a href="blog-single.html"
-                      >News Needs to Meet Its Audiences Where They Are</a
-                    >
-                  </h2>
-                  <div class="post-meta">
-                    <span class="d-block"
-                      ><a href="#">Dave Rogers</a> in <a href="#">News</a></span
-                    >
-                    <span class="date-read"
-                      >Jun 14 <span class="mx-1">&bullet;</span> 3 min read
-                      <span class="icon-star2"></span
-                    ></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="trend-entry d-flex">
-                <div class="number align-self-start">03</div>
-                <div class="trend-contents">
-                  <h2>
-                    <a href="blog-single.html"
-                      >News Needs to Meet Its Audiences Where They Are</a
-                    >
-                  </h2>
-                  <div class="post-meta">
-                    <span class="d-block"
-                      ><a href="#">Dave Rogers</a> in <a href="#">News</a></span
-                    >
-                    <span class="date-read"
-                      >Jun 14 <span class="mx-1">&bullet;</span> 3 min read
-                      <span class="icon-star2"></span
-                    ></span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="trend-entry d-flex pl-0">
-                <div class="number align-self-start">04</div>
-                <div class="trend-contents">
-                  <h2>
-                    <a href="blog-single.html"
-                      >News Needs to Meet Its Audiences Where They Are</a
-                    >
-                  </h2>
-                  <div class="post-meta">
-                    <span class="d-block"
-                      ><a href="#">Dave Rogers</a> in <a href="#">News</a></span
-                    >
-                    <span class="date-read"
-                      >Jun 14 <span class="mx-1">&bullet;</span> 3 min read
-                      <span class="icon-star2"></span
-                    ></span>
-                  </div>
-                </div>
-              </div>
-
-              <p>
-                <a href="#" class="more"
-                  >See All Popular
-                  <span class="icon-keyboard_arrow_right"></span
-                ></a>
-              </p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg-6">
-              <ul class="custom-pagination list-unstyled">
-                <li><a href="#">1</a></li>
-                <li class="active">2</li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-              </ul>
-            </div>
+  <div class="pb-5">
+    <Banner v-if="false"></Banner>
+    <div
+      id="carouselExampleIndicators"
+      class="carousel slide mb-5"
+      data-ride="carousel"
+    >
+      <ol class="carousel-indicators">
+        <li
+          data-target="#carouselExampleIndicators"
+          data-slide-to="0"
+          class="active"
+        ></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item active ">
+          <div class="carousel-caption mb-5">
+            <h3 class="text-decondary">MEVN PROJECT</h3>
+            <p class="text-decondary">
+              MongoDB + Express.js + Vue.js + Node.js
+            </p>
           </div>
         </div>
       </div>
     </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mr-md-auto">
+          <div class="section-title">
+            <h2>Recent Posts</h2>
+          </div>
+
+          <!-- Post Item -->
+          <template v-if="posts && posts.length > 0 && !isLoading">
+            <PostItem
+              v-for="post in posts"
+              class="row mb-5"
+              :key="post._id"
+              :title="post.title"
+              :content="post.content"
+              :image-url="post.imageUrl"
+              :creator="post.creator"
+              :createdAt="post.createdAt"
+              :id="post._id"
+              @get-post="getPost"
+            >
+              <div class="text-info pointer" @click.stop="getPost(post._id)">
+                Read More
+              </div>
+            </PostItem>
+          </template>
+          <p class="h3 text-dark" v-else-if="!isLoading">No posts found.</p>
+          <p class="h6 text-dark">{{ errorMessage }}</p>
+        </div>
+        <!-- Post Summary Item -->
+        <div class="col-lg-3 mt-5 mt-lg-0">
+          <div class="section-title">
+            <h2>Popular Posts</h2>
+          </div>
+          <template v-if="recentPosts && recentPosts.length > 0 && !isLoading">
+            <PostSummaryItem
+              v-for="(post, index) in recentPosts"
+              :index="index"
+              :key="post._id"
+              :title="post.title"
+              :creator="post.creator"
+              :id="post._id"
+              :createdAt="post.createdAt"
+            >
+            </PostSummaryItem>
+          </template>
+          <p>
+            <router-link
+              class="more text-info d-flex align-items-center"
+              :to="{ name: 'Posts' }"
+              >See All Posts. <span class="icon-keyboard_arrow_right"></span
+            ></router-link>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-
+import PostItem from '@/components/Posts/PostItem.vue'
+import PostSummaryItem from '@/components/Posts/PostSummaryItem.vue'
+import Banner from '@/components/ui/Banner.vue'
 export default {
-  name: 'Home',
+  name: 'Posts',
+  data () {
+    return {
+      errorMessage: ''
+    }
+  },
   components: {
-
+    PostItem,
+    PostSummaryItem,
+    Banner
+  },
+  mounted () {
+    this.getPosts(1)
+  },
+  computed: {
+    posts () {
+      return this.$store.getters['posts/posts']
+    },
+    recentPosts () {
+      return this.$store.getters['posts/recentPosts']
+    },
+    isLoading () {
+      return this.$store.getters.isLoading
+    }
+  },
+  methods: {
+    getPost (postId) {
+      this.$router.push({ name: 'SinglePost', params: { postId: postId } })
+    },
+    async getPosts (page = 1) {
+      this.$store.commit('changeLoading', true)
+      try {
+        await this.$store.dispatch('posts/GET_POSTS', { page: page })
+      } catch (error) {
+        this.errorMessage =
+          error.response.data?.message || 'Something went wrong.'
+        console.log(error)
+      }
+      this.$store.commit('changeLoading', false)
+    }
   }
 }
 </script>

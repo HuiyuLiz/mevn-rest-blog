@@ -1,18 +1,19 @@
 const fs = require('fs')
 const path = require('path')
 const Post = require('../models/post')
+const User = require('../models/user')
 const { validationResult } = require('express-validator')
 
 function getPost(req, res, next) {
 	const ObjectId = require('mongoose').Types.ObjectId
 	const postId = req.params.postId
-
 	if (!ObjectId.isValid(postId)) {
 		const error = new Error('Could not find post.')
 		error.statusCode = 404
 		throw error
 	} else {
 		Post.findById(postId)
+			.populate('creator', 'name _id')
 			.then(post => {
 				res.status(200).json({
 					message: 'Post fetched.',
@@ -27,46 +28,20 @@ function getPost(req, res, next) {
 				next(error)
 			})
 	}
-	
 }
 
-function deletePost(req, res, next) {
-	const postId = req.params.postId
-	Post.findById(postId)
-		.then(post => {
-			if (!post) {
-				const error = new Error('Could not find post.')
-				error.statusCode = 404
-				throw error
-			}
-			clearImage(post.imageUrl)
-			return Post.findByIdAndRemove(post._id)
-		})
-		.then(result => {
-			res.status(200).json({
-				message: 'Deleted post.'
-			})
-		})
-		.catch(error => {
-			if (!error.statusCode) {
-				error.statusCode = 500
-				error.message = 'Oops, Something went wrong.'
-			}
-			next(error)
-		})
-}
 
 function getPosts(req, res, next) {
 	const currentPage = req.query.page ||1
 	const perPageItem = 5
 	let totalItem
-
 	Post
 		.find()
 		.countDocuments()
 		.then(total => {
 			totalItem = total
 			return Post.find()
+				.populate('creator', 'name _id')
 				.skip((currentPage - 1) * perPageItem)
 				.limit(perPageItem)
 		})
@@ -104,21 +79,30 @@ function createPost(req, res, next) {
 		throw error
 	}
 
+	let creator
 	const { title, content } = req.body
 	const imageUrl = req.file.path.replace('\\', '/')
 	const post = new Post({
 		title: title,
 		content: content,
 		imageUrl: imageUrl,
-		creator: {
-			name: 'Li'
-		},
+		creator: req.userId,
 	})
-	post.save()
-		.then(response => {
+	post
+		.save()
+		.then(result => {
+			return User.findById(req.userId)
+		})
+		.then(user=>{
+			creator = user
+			user.posts.push(post)
+			return user.save()
+		})
+		.then(result=>{
 			res.status(201).json({
 				message: 'Post created successfully.',
-				post: response
+				post: post,
+				creator: { _id: creator._id, name: creator.name}
 			})
 		})
 		.catch(error => {
@@ -148,7 +132,6 @@ function updatePost(req, res, next) {
 		error.statusCode = 422
 		throw error
 	}
-
 	Post.findById(postId)
 		.then(post => {
 			if(!post){
@@ -156,6 +139,13 @@ function updatePost(req, res, next) {
 				error.statusCode = 404
 				throw error
 			}
+
+			if (post.creator.toString() !== req.userId) {
+				const error = new Error('No authorized.')
+				error.statusCode = 403
+				throw error
+			}
+
 			if(imageUrl !== post.imageUrl){
 				clearImage(post.imageUrl)
 			}
@@ -178,6 +168,46 @@ function updatePost(req, res, next) {
 			next(error)
 		})
 
+}
+
+function deletePost(req, res, next) {
+	const postId = req.params.postId
+	Post.findById(postId)
+		.then(post => {
+			if (!post) {
+				const error = new Error('Could not find post.')
+				error.statusCode = 404
+				throw error
+			}
+
+			if (post.creator.toString() !== req.userId) {
+				const error = new Error('No authorized.')
+				error.statusCode = 403
+				throw error
+			}
+
+			clearImage(post.imageUrl)
+			return Post.findByIdAndRemove(postId)
+		})
+		.then(result => {
+			return User.findById(req.userId)
+		})
+		.then(user => {
+			user.posts.pull(postId)
+			return user.save()
+		})
+		.then(result => {
+			res.status(200).json({
+				message: 'Deleted post.'
+			})
+		})
+		.catch(error => {
+			if (!error.statusCode) {
+				error.statusCode = 500
+				error.message = 'Oops, Something went wrong.'
+			}
+			next(error)
+		})
 }
 
 function clearImage(filePath) {

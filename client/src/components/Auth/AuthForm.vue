@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Form :validation-schema="schema" @submit="onSubmit" id="form">
-      <div class="form-group" v-if="!isLogin">
+    <Form :validation-schema="schema" @submit="onSubmit" id="form" :class="{'fade-in':isFadeIn}">
+      <div class="form-group" v-if="!isAuth">
         <label for="name">User name</label>
         <Field
           name="name"
@@ -55,15 +55,15 @@
           class="btn btn-dark mb-3 mb-md-0"
           :class="{ disabled: isOnSubmit }"
         >
-          {{ buttonModeStatus }}
+          {{ submitButtonContent }}
         </button>
         <button
           type="button"
           class="btn btn-outline-dark ml-md-3"
           :class="{ disabled: isOnSubmit }"
-          @click="switchMode"
+          @click="switchAuthMode"
         >
-          {{ buttonSwitchStatus }}
+          {{ switchModeButtonContent }}
         </button>
       </div>
     </Form>
@@ -74,7 +74,7 @@
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import * as yup from 'yup'
 export default {
-  emits: ['on-submit', 'switch-mode'],
+  emits: ['on-submit', 'switch-mode', 'composition-typing'],
   props: {
     isOnSubmit: {
       type: Boolean,
@@ -95,7 +95,8 @@ export default {
       name: '',
       email: '',
       password: '',
-      isLogin: false,
+      isAuth: false,
+      isFadeIn: false,
       schema: yup.object().shape({
         name: yup.string().required(),
         email: yup.string().email().required(),
@@ -104,15 +105,15 @@ export default {
     }
   },
   computed: {
-    buttonModeStatus () {
-      if (this.isLogin) {
+    submitButtonContent () {
+      if (this.isAuth) {
         return 'Login'
       } else {
         return 'Sign Up'
       }
     },
-    buttonSwitchStatus () {
-      if (this.isLogin) {
+    switchModeButtonContent () {
+      if (this.isAuth) {
         return 'Sign Up Instead'
       } else {
         return 'Login Instead'
@@ -120,22 +121,30 @@ export default {
     }
   },
   watch: {
-    message (newValue, oldValue) {
+    isAuth (newValue, oldValue) {
       if (newValue !== oldValue) {
-        this.clearInputs()
+        this.isFadeIn = true
+        setTimeout(() => {
+          this.isFadeIn = false
+        }, 1000)
       }
-      setTimeout(() => {
-        this.formReset()
-      }, 200)
+    },
+    message (newValue, oldValue) {
+      // if (newValue !== oldValue) {
+      //   this.clearInputs()
+      // }
+      // setTimeout(() => {
+      //   this.formReset()
+      // }, 200)
     }
   },
   methods: {
     onSubmit (values, event) {
       this.$emit('on-submit', values)
     },
-    switchMode () {
-      this.isLogin = !this.isLogin
-      this.$emit('switch-mode', this.isLogin)
+    switchAuthMode () {
+      this.isAuth = !this.isAuth
+      this.$emit('switch-mode', this.isAuth)
       this.clearInputs()
       setTimeout(() => {
         this.formReset()
@@ -149,9 +158,21 @@ export default {
       this.email = ''
       this.password = ''
     }
+
   }
 }
 </script>
 
-<style>
+<style scoped>
+  .fade-in{
+    animation: fadeIn .3s ease-in;
+  }
+  @keyframes fadeIn{
+    0%{
+      opacity:0;
+    }
+    100%{
+      opacity:1;
+    }
+  }
 </style>

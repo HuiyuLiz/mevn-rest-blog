@@ -1,10 +1,9 @@
 <template>
   <div class="row">
     <div class="col-lg-6">
-     totalPosts {{ totalPosts }} totalPage{{ totalPage}} currentPage:{{currentPage}}
       <ul class="custom-pagination list-unstyled">
-        <li v-for="page in totalPage" :key="page" class="px-2 text-secondary" :class="{'active':currentPage===page}">
-          <router-link :to="{ name:'Posts',query: { page: page}}">{{ page }}</router-link>
+        <li v-for="page in totalPage" :key="page" class="mr-2 text-secondary" :class="{'active':currentPage===page}">
+          <router-link :to="{ name:name,query: { page: page}}">{{ page }}</router-link>
         </li>
       </ul>
     </div>
@@ -15,6 +14,9 @@
 export default {
   name: 'BasePagination',
   props: {
+    name: {
+      type: String
+    },
     totalPosts: {
       type: Number,
       default: 1
@@ -24,9 +26,6 @@ export default {
     return {
       perPageItem: 5
     }
-  },
-  mounted () {
-    console.log(this.currentPage, this.totalPosts / this.perPageItem)
   },
   computed: {
     currentPage () {

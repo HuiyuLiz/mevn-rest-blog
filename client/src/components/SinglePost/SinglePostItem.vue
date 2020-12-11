@@ -1,13 +1,9 @@
 <template>
   <div class="col-lg-8 single-content">
-    <h1 class="mb-4">{{ title }}-{{postId}}</h1>
+    <h1 class="mb-4">{{ title }}</h1>
     <div class="post-meta d-flex mb-5">
-      <div class="bio-pic mr-3">
-        <img
-          src="https://source.unsplash.com/user/erondu/200x200"
-          alt="Image"
-          class="img-fluidid"
-        />
+      <div class="bg-info mr-3 post-profile-thumbnail d-flex justify-content-center align-items-center">
+        <span class="text-light h3 mb-0">{{ creator.name.substr(0, 1).toLocaleUpperCase()}}</span>
       </div>
       <div class="vcard" v-if="creator">
         <span class="d-block"
@@ -28,13 +24,6 @@
       <div v-html="formatHtml"></div>
     </template>
 
-    <div class="pt-5">
-      <p>
-        Categories: <a href="#">Design</a>, <a href="#">Events</a> Tags:
-        <a href="#">#html</a>,
-        <a href="#">#trends</a>
-      </p>
-    </div>
   </div>
 </template>
 
@@ -70,7 +59,7 @@ export default {
       return `${process.env.VUE_APP_API_URL}/${this.imageUrl}`
     },
     formatTime () {
-      return dayjs(this.createdAt).format('YYYY / MM / DD  h : mm A')
+      return dayjs(this.createdAt).format('MMM DD')
     },
     jsonParseContent () {
       return this.content !== '' ? parseJson(this.content) : ''

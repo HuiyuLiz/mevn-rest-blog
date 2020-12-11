@@ -14,14 +14,24 @@
           <p class="col h4" v-else>{{ errorMessage }}</p>
           <div class="col-lg-3 ml-auto">
             <div class="section-title">
-              <h2>Recent Posts</h2>
+              <h2>Popular Posts</h2>
             </div>
-            <PostSummaryItem></PostSummaryItem>
-            <p>
-              <a href="#" class="more"
-                >See All Popular <span class="icon-keyboard_arrow_right"></span
-              ></a>
-            </p>
+          <template v-if="recentPosts && recentPosts.length > 0">
+            <PostSummaryItem
+              v-for="(post, index) in recentPosts"
+              :index="index"
+              :key="post._id"
+              :title="post.title"
+              :creator="post.creator"
+              :id="post._id"
+              :createdAt="post.createdAt"
+            >
+            </PostSummaryItem>
+          </template>
+          <p>
+            <router-link class="more text-info d-flex align-items-center" :to="{name:'Posts'}">See All Posts. <span class="icon-keyboard_arrow_right"></span
+            ></router-link>
+          </p>
           </div>
         </div>
       </div>
@@ -46,6 +56,7 @@ export default {
   data () {
     return {
       post: null,
+      creator: null,
       errorMessage: ''
     }
   },
@@ -55,23 +66,42 @@ export default {
       this.getPost(newPostId)
     }
   },
+  computed: {
+    recentPosts () {
+      return this.$store.getters['posts/recentPosts']
+    }
+  },
   methods: {
     getPost (postId) {
-      this.$http
-        .get(`${process.env.VUE_APP_API_URL}/blog/posts/` + postId)
+      this.$http({
+        method: 'GET',
+        url: `${process.env.VUE_APP_API_URL}/blog/posts/` + postId
+      })
         .then((response) => {
           this.post = response.data ? response.data.post : null
-          console.log(this.post)
+          this.creator = response.data ? response.data.creator : null
         })
         .catch((error) => {
-          console.log(error)
           this.post = null
           this.errorMessage = error.response.data.message
         })
+    },
+    async getPosts (page = 1) {
+      this.$store.commit('changeLoading', true)
+      try {
+        await this.$store.dispatch('posts/GET_POSTS', {
+          page: page
+        })
+      } catch (error) {
+        this.errorMessage =
+          error.response.data?.message || 'Something went wrong.'
+      }
+      this.$store.commit('changeLoading', false)
     }
   },
   mounted () {
     this.getPost(this.postId)
+    this.getPosts(1)
   }
 }
 </script>

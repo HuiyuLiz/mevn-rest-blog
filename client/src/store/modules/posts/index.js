@@ -4,12 +4,16 @@ export default {
   state () {
     return {
       posts: [],
-      totalPosts: 0
+      totalPosts: 0,
+      recentPosts: []
     }
   },
   getters: {
     posts (state) {
       return state.posts
+    },
+    recentPosts (state) {
+      return state.recentPosts
     },
     totalPosts (state) {
       return state.totalPosts
@@ -19,18 +23,23 @@ export default {
     setPosts (state, payload) {
       state.posts = payload
     },
+    setRecentPosts (state, payload) {
+      state.recentPosts = payload
+    },
     setTotalPosts (state, payload) {
       state.totalPosts = payload
     },
     setErrorMessage (state, payload) {
       state.errorMessage = payload
+    },
+    setToken (state, payload) {
+      state.token = payload
     }
   },
   actions: {
-    async GET_POSTS ({ commit, dispatch }, page) {
-      console.log('page', page)
+    async GET_POSTS ({ commit }, payload) {
       const response = new Promise((resolve, reject) => {
-        getPosts(page)
+        getPosts(payload.page)
           .then((response) => {
             if (response.status >= 200 && response.status < 300) {
               resolve(response)
@@ -43,16 +52,19 @@ export default {
           })
       })
       const result = await response
-      console.log(result)
       const posts = result.data ? result.data.posts : []
       const totalPosts = result.data ? result.data.totalItem : 0
+      if (payload.page === 1) {
+        const recentPosts = posts.filter((post, index) => index < 3)
+        commit('setRecentPosts', recentPosts)
+      }
       commit('setPosts', posts)
       commit('setTotalPosts', totalPosts)
       return response
     },
-    async DELETE_POST ({ commit, dispatch, getters }, id) {
+    async DELETE_POST ({ commit, dispatch, getters }, payload) {
       const response = new Promise((resolve, reject) => {
-        deletePost(id)
+        deletePost(payload.id, payload.token)
           .then((response) => {
             if (response.status === 200 || response.status === 201) {
               resolve(response)
@@ -66,22 +78,9 @@ export default {
           })
       })
       const result = await response
-      const posts = getters.posts.filter((post) => post._id !== id)
+      const posts = getters.posts.filter((post) => post._id !== payload.id)
       commit('setPosts', posts)
       return result
-      // axios
-      //   .delete(`${process.env.VUE_APP_API_URL}/blog/posts/${id}`)
-      //   .then((response) => {
-      //     if (response.status !== 200) {
-      //       throw new Error('Deleting a post failed.')
-      //     }
-      //     const posts = getters.posts.filter((post) => post._id !== id)
-      //     commit('setPosts', posts)
-      //   })
-      //   .catch((error) => {
-      //     console.log('error', error)
-      //   })
     }
-
   }
 }

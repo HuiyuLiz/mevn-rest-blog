@@ -1,25 +1,15 @@
 <template>
-  <div>
-    <div class="col-md-4 order-md-2">
-      <img :src="formatImage" class="card-img w-100 rounded-0" />
-    </div>
-    <div class="col-md-7 order-md-1">
-      <div class="card-body p-0" >
-        <h6 class="text-dark h6 pointer mb-3" @click="getPost">
-          {{ title }}
-        </h6>
-        <template v-if="content">
-          <p>{{ formatCleanText }}</p>
-        </template>
-        <div class="post-meta d-md-flex justify-content-between">
-          <div class="mb-2">
-            <span class="date-read">By <span class="text-dark">{{ creator.name }}&nbsp;&nbsp;</span>  {{ formatTime }}<span class="mx-1">•</span> 5 min read <span class="icon-star2"></span></span>
-          </div>
-        </div>
-        <slot></slot>
-      </div>
-    </div>
-  </div>
+  <tr>
+    <th scope="row">1</th>
+    <td>{{ title }}</td>
+    <td>
+      <template v-if="content">
+        <div v-html="formatDescription"></div>
+      </template>
+    </td>
+    <td><span class="date-read">{{ formatTime }}<span class="mx-1">•</span> 5 min read <span class="icon-star2"></span></span></td>
+    <td><img :src="formatImage" class="card-img w-100 rounded-0" /></td>
+  </tr>
 </template>
 
 <script>
@@ -69,13 +59,12 @@ export default {
     jsonParseContent () {
       return this.content !== '' ? parseJson(this.content) : ''
     },
-    formatCleanText () {
-      const content = this.formatDescription.replace(/<\/?[^>]+(>|$)/g, '')
-      const splitContent = content.substring(0, 60) + '...'
-      return splitContent
-    },
     formatDescription () {
-      let content = this.jsonParseContent.blocks.length > 0 && this.jsonParseContent !== undefined ? this.jsonParseContent.blocks[0] : ''
+      let content =
+        this.jsonParseContent.blocks.length > 0 &&
+        this.jsonParseContent !== undefined
+          ? this.jsonParseContent.blocks[0]
+          : ''
       switch (content.type) {
         case 'header':
           content = `<h${content.data.level}>${content.data.text}</h${content.data.level}>`
@@ -139,9 +128,7 @@ export default {
       this.$emit('get-post', this.id)
     }
   },
-  mounted () {
-  }
-
+  mounted () {}
 }
 </script>
 

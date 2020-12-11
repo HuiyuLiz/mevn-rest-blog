@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 
 import postModule from './modules/posts'
+import authModule from './modules/auth'
 
 const store = createStore({
   state () {
@@ -19,7 +20,8 @@ const store = createStore({
     }
   },
   modules: {
-    posts: postModule
+    posts: postModule,
+    auth: authModule
   }
 
 })

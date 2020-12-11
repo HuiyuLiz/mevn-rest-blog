@@ -59,13 +59,13 @@ app.use((error,req,res,next)=>{
 })
 
 // Handle production
-// if (process.env.NODE_ENV === 'production') {
-//   // Set static folder
-//   app.use(express.static(__dirname + '/public/'))
+if (process.env.NODE_ENV === 'production') {
+	// Set static folder
+	app.use(express.static(__dirname + '/public/'))
 
-//   // Handle SPA
-//   app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'))
-// }
+	// Handle SPA
+	app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'))
+}
 // connect mongoDB
 mongoose.connect(process.env.MONGODB_URI, {
 	useNewUrlParser: true,
