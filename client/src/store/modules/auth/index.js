@@ -23,7 +23,6 @@ export default {
     isAuthenticated (state) {
       return !!state.token
     }
-
   },
   mutations: {
     setMessage (state, payload) {
@@ -93,7 +92,6 @@ export default {
         const data = { token, userId }
         commit('setUser', data)
       }
-      console.log('AUTO_LOGIN')
     },
     SET_LOCAL_STORAGE ({ getters, dispatch }) {
       const expiresIn = 60 * 60 * 1000
@@ -113,7 +111,6 @@ export default {
       localStorage.removeItem('tokenExpiration')
     },
     LOGOUT ({ commit, dispatch }) {
-      console.log('LOGOUT')
       const data = {
         token: null,
         userId: null

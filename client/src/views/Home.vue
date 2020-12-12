@@ -10,14 +10,14 @@
         <li
           data-target="#carouselExampleIndicators"
           data-slide-to="0"
-          class="active"
+          class="active" style="opacity:.5"
         ></li>
       </ol>
       <div class="carousel-inner">
         <div class="carousel-item active ">
           <div class="carousel-caption mb-5">
-            <h3 class="text-decondary">MEVN PROJECT</h3>
-            <p class="text-decondary">
+            <h3 class="text-white mb-3" style="letter-spacing:.25rem">MEVN PROJECT</h3>
+            <p class="text-light" style="letter-spacing:.25rem">
               MongoDB + Express.js + Vue.js + Node.js
             </p>
           </div>
@@ -45,7 +45,7 @@
               :id="post._id"
               @get-post="getPost"
             >
-              <div class="text-info pointer" @click.stop="getPost(post._id)">
+              <div class="text-info pointer font-weight-bold" @click.stop="getPost(post._id)">
                 Read More
               </div>
             </PostItem>
@@ -72,9 +72,9 @@
           </template>
           <p>
             <router-link
-              class="more text-info d-flex align-items-center"
+              class="text-info d-flex align-items-center font-weight-bold"
               :to="{ name: 'Posts' }"
-              >See All Posts. <span class="icon-keyboard_arrow_right"></span
+              >See All Posts<span class="icon-keyboard_arrow_right"></span
             ></router-link>
           </p>
         </div>

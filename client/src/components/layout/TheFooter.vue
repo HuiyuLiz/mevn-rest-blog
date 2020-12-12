@@ -5,8 +5,8 @@
         <div class="container">
           <form action="#" class="row">
             <div class="col-md-5 text-left">
-              <h2>MEVN PROJECT</h2>
-              <p >
+              <h2 style="letter-spacing:.25rem">MEVN PROJECT</h2>
+              <p style="letter-spacing:.25rem">
                 MongoDB + Express.js + Vue.js + Node.js
               </p>
             </div>

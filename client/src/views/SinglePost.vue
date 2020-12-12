@@ -28,10 +28,6 @@
             >
             </PostSummaryItem>
           </template>
-          <p>
-            <router-link class="more text-info d-flex align-items-center" :to="{name:'Posts'}">See All Posts. <span class="icon-keyboard_arrow_right"></span
-            ></router-link>
-          </p>
           </div>
         </div>
       </div>

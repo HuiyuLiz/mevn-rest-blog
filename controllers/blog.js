@@ -132,6 +132,8 @@ function updatePost(req, res, next) {
 		error.statusCode = 422
 		throw error
 	}
+
+	let updatePost
 	Post.findById(postId)
 		.then(post => {
 			if(!post){
@@ -154,10 +156,15 @@ function updatePost(req, res, next) {
 			post.imageUrl=imageUrl
 			return post.save()
 		})
-		.then(result=>{
+		.then(result => {
+			updatePost = result
+			return User.findById(req.userId)
+		})
+		.then(user => {
 			res.status(200).json({
 				message: 'Post Updated.',
-				post: result
+				post: updatePost,
+				creator: { _id: user._id, name: user.name }
 			})
 		})
 		.catch(error => {

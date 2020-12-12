@@ -5,14 +5,14 @@
     </div>
     <div class="col-md-7 order-md-1">
       <div class="card-body p-0" >
-        <h6 class="text-dark h6 pointer mb-3" @click="getPost">
+        <h6 class="text-dark h6 pointer mb-3 font-weight-bold" @click="getPost">
           {{ title }}
         </h6>
-        <template v-if="content">
+        <template v-if="formatCleanText">
           <p>{{ formatCleanText }}</p>
         </template>
         <div class="post-meta d-md-flex justify-content-between">
-          <div class="mb-2">
+          <div class="mb-2" v-if="creator">
             <span class="date-read">By <span class="text-dark">{{ creator.name }}&nbsp;&nbsp;</span>  {{ formatTime }}<span class="mx-1">•</span> 5 min read <span class="icon-star2"></span></span>
           </div>
         </div>
@@ -56,7 +56,8 @@ export default {
   name: 'PostItem',
   data () {
     return {
-      formatContent: ''
+      formatContent: '',
+      substringLength: 60
     }
   },
   computed: {
@@ -71,7 +72,8 @@ export default {
     },
     formatCleanText () {
       const content = this.formatDescription.replace(/<\/?[^>]+(>|$)/g, '')
-      const splitContent = content.substring(0, 60) + '...'
+      const substring = content.substring(0, this.substringLength)
+      const splitContent = content.length > this.substringLength ? substring + '...' : substring
       return splitContent
     },
     formatDescription () {

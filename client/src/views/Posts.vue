@@ -20,7 +20,7 @@
               :id="post._id"
               @get-post="getPost"
             >
-              <div class="text-info pointer" @click.stop="getPost(post._id)">
+              <div class="text-info pointer font-weight-bold" @click.stop="getPost(post._id)">
                 Read More
               </div>
             </PostItem>

@@ -167,6 +167,7 @@
 
 <script>
 import $ from 'jquery'
+import { createPost, editingPost } from '@/api service/api.js'
 import PostItem from '@/components/Posts/PostItem.vue'
 import BasePagination from '@/components/utilities/BasePagination.vue'
 import EditorJS from '@editorjs/editorjs'
@@ -216,6 +217,13 @@ export default {
     token (newVal, oldVal) {
       if (!newVal || newVal !== oldVal) {
         this.$router.replace({ name: 'Auth' })
+      }
+    },
+    errorMessage (value) {
+      if (value !== '') {
+        setTimeout(() => {
+          this.errorMessage = ''
+        }, 3000)
       }
     }
   },
@@ -299,16 +307,10 @@ export default {
       this.$router.push({ name: 'SinglePost', params: { postId: postId } })
     },
     async getPosts (page = 1) {
-      // this.getLocalStorageData()
-      // if (!this.token || !this.tokenExpiration) {
-      //   this.$router.replace({ name: 'Auth' })
-      // }
-
       this.$store.commit('changeLoading', true)
       try {
         await this.$store.dispatch('posts/GET_POSTS', {
-          page: page,
-          token: this.token
+          page: page
         })
       } catch (error) {
         this.errorMessage =
@@ -319,13 +321,45 @@ export default {
     },
     async deletePost (id) {
       try {
-        this.$store.dispatch('posts/DELETE_POST', id)
+        this.$store.dispatch('posts/DELETE_POST', {
+          id: id,
+          token: this.token
+        })
       } catch (error) {
         if (error.response.status === 404) {
           this.errorMessage = 'Deleting a post failed.'
         } else {
           this.errorMessage = 'Something went wrong.'
         }
+      }
+    },
+    responseHandler (response) {
+      if (response.status === 200 || response.status === 201) {
+        const updatePosts = [...this.posts]
+        const updatePost = {
+          _id: response.data.post._id,
+          title: response.data.post.title,
+          content: response.data.post.content,
+          imageUrl: response.data.post.imageUrl,
+          creator: response.data.creator,
+          createdAt: response.data.post.createdAt
+        }
+        if (this.isEditing) {
+          const index = this.posts.findIndex(
+            (post) => post._id === updatePost._id
+          )
+          updatePosts[index] = updatePost
+        } else {
+          updatePosts.push(updatePost)
+        }
+        this.$store.commit('posts/setPosts', updatePosts)
+      } else {
+        throw new Error('Creating or editing a post failed.')
+      }
+    },
+    errorHandler (error) {
+      if (error) {
+        this.errorMessage = 'Something went wrong.'
       }
     },
     async createPost () {
@@ -344,62 +378,38 @@ export default {
           imageUrl: this.editingImageUrl
         }
       }
-      let method
-      let url
-      if (!this.isEditing) {
-        method = 'POST'
-        url = `${process.env.VUE_APP_API_URL}/blog/posts`
-      } else {
-        method = 'PUT'
-        url = `${process.env.VUE_APP_API_URL}/blog/posts/${this.editingPost._id}`
-      }
 
       const formData = new FormData()
       formData.append('title', newPost.title)
       formData.append('content', JSON.stringify(newPost.content))
       formData.append('image', newPost.imageUrl)
 
-      this.$http({
-        method: method,
-        url: url,
-        data: formData,
+      const config = {
         headers: {
           Authorization: 'Bearer ' + this.token
         }
-      })
-        .then((response) => {
-          if (response.status === 200 || response.status === 201) {
-            const updatePosts = [...this.posts]
-            const updatePost = {
-              _id: response.data.post._id,
-              title: response.data.post.title,
-              content: response.data.post.content,
-              imageUrl: response.data.post.imageUrl,
-              creator: response.data.creator,
-              createdAt: response.data.post.createdAt
-            }
-            if (this.isEditing) {
-              const index = this.posts.findIndex(
-                (post) => post._id === updatePost._id
-              )
-              updatePosts[index] = updatePost
-            } else {
-              updatePosts.push(updatePost)
-            }
-            this.$store.commit('posts/setPosts', updatePosts)
-          } else {
-            throw new Error('Creating or editing a post failed.')
-          }
-          this.getPosts(this.page)
-          $('#modal').modal('hide')
-        })
-        .catch((error) => {
-          if (error) {
-            this.errorMessage = 'Something went wrong.'
-          }
-          $('#modal').modal('hide')
-          console.log(error)
-        })
+      }
+      if (!this.isEditing) {
+        createPost(formData, config)
+          .then((response) => {
+            this.responseHandler(response)
+            $('#modal').modal('hide')
+          })
+          .catch((error) => {
+            this.errorHandler(error)
+            $('#modal').modal('hide')
+          })
+      } else {
+        editingPost(this.editingPost._id, formData, config)
+          .then((response) => {
+            this.responseHandler(response)
+            $('#modal').modal('hide')
+          })
+          .catch((error) => {
+            this.errorHandler(error)
+            $('#modal').modal('hide')
+          })
+      }
     },
     async clearContent () {
       await window.editor.blocks.clear()

@@ -63,8 +63,13 @@ export default {
       return response
     },
     async DELETE_POST ({ commit, dispatch, getters }, payload) {
+      const config = {
+        headers: {
+          Authorization: 'Bearer ' + payload.token
+        }
+      }
       const response = new Promise((resolve, reject) => {
-        deletePost(payload.id, payload.token)
+        deletePost(payload.id, config)
           .then((response) => {
             if (response.status === 200 || response.status === 201) {
               resolve(response)

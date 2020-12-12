@@ -1,17 +1,9 @@
 <template>
   <div class="col-lg-8 single-content">
-    <h1 class="mb-4">{{ title }}</h1>
-    <div class="post-meta d-flex mb-5">
-      <div class="bg-info mr-3 post-profile-thumbnail d-flex justify-content-center align-items-center">
-        <span class="text-light h3 mb-0">{{ creator.name.substr(0, 1).toLocaleUpperCase()}}</span>
-      </div>
-      <div class="vcard" v-if="creator">
-        <span class="d-block"
-          ><a href="#">{{ creator.name }}</a> </span
-        >
-        <span class="date-read"
-          >{{ formatTime }}</span>
-      </div>
+    <h1 class="mb-4 text-center">{{ title }}</h1>
+    <div class="d-flex mx-auto mt-3 mb-4 bg-dark" style="width:30px;height:2px"></div>
+    <div class="text-center text-dark mb-5" v-if="creator">
+      <small>{{ formatTime }} By {{ creator.name }}</small>
     </div>
         <p class="mb-5">
       <img
@@ -21,7 +13,7 @@
       />
     </p>
     <template v-if="content">
-      <div v-html="formatHtml"></div>
+      <div v-html="formatHtml" class="text-dark"></div>
     </template>
 
   </div>
@@ -59,7 +51,7 @@ export default {
       return `${process.env.VUE_APP_API_URL}/${this.imageUrl}`
     },
     formatTime () {
-      return dayjs(this.createdAt).format('MMM DD')
+      return dayjs(this.createdAt).format('DD/MM/YYYY')
     },
     jsonParseContent () {
       return this.content !== '' ? parseJson(this.content) : ''
@@ -72,7 +64,7 @@ export default {
             html += `<h${block.data.level}>${block.data.text}</h${block.data.level}>`
             break
           case 'paragraph':
-            html += `<p>${block.data.text}</p>`
+            html += `<p>${block.data.text}</p></br>`
             break
           case 'delimiter':
             html += '<hr />'
@@ -98,5 +90,5 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 </style>

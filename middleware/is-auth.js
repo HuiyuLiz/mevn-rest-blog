@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 
 // Load Env
-dotenv.config({ path: '../config.env' })
+dotenv.config({ path: '../config/config.env' })
 
 module.exports = (req,res,next)=> {
 	const header = req.get('Authorization')

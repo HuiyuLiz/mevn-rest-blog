@@ -5,6 +5,8 @@ const dotenv = require('dotenv')
 const morgan = require('morgan')
 const cors = require('cors')
 const multer = require('multer')
+const helmet = require('helmet')
+const compression = require('compression')
 const { v4: uuidv4 } = require('uuid')
 const bodyParser = require('body-parser')
 
@@ -12,7 +14,7 @@ const app = express()
 const port = process.env.PORT || 8080
 
 // Load Env
-dotenv.config({ path: './config.env' })
+dotenv.config({ path: './config/config.env' })
 
 // morgan
 if (process.env.NODE_ENV === 'development') {
@@ -39,6 +41,8 @@ function fileFilter(req, file, cb) {
 }
 
 app.use(cors())
+app.use(helmet())
+app.use(compression())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/images', express.static(path.join(__dirname,'images')))
@@ -60,11 +64,8 @@ app.use((error,req,res,next)=>{
 
 // Handle production
 if (process.env.NODE_ENV === 'production') {
-	// Set static folder
-	app.use(express.static(__dirname + '/public/'))
-
-	// Handle SPA
-	app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'))
+	app.use(express.static('client/dist'))
+	app.get('*', (req, res) => res.sendFile(path.resolve(__dirname ,'client','dist','index.html')))
 }
 // connect mongoDB
 mongoose.connect(process.env.MONGODB_URI, {

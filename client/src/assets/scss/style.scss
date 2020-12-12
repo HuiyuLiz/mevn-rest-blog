@@ -10,10 +10,20 @@
 /* Blocks */
 @import "site-blocks";
 
+@function asset($path) {
+  @return url("~@/assets/#{$path}");
+}
+
 body {
-  font-family: "Cabin", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", Sans-Serif;
-  ;
+  font-family: 'Lato', 'Montserrat', sans-serif;
   letter-spacing: 0.075rem;
+}
+
+
+p {
+  font-size: .85rem;
+  font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+  font-weight: normal;
 }
 
 .object-cover {
@@ -39,9 +49,14 @@ body {
 .carousel-item {
   width: 100%;
   height: 400px;
-  background-image: url('https://images.unsplash.com/photo-1580315362297-5be36f0de025?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=2067&q=80');
-  background-position: center 40%;
+  background: linear-gradient(to top, rgba(0, 0, 0, .5), rgba(0, 0, 0, .35)), asset("/images/background.jpg") no-repeat;
+  background-position: center 25%;
   background-size: cover;
+
+  @media screen and (max-width:768px) {
+    height: 250px;
+    background-position: center bottom;
+  }
 }
 
 .carousel-caption {
@@ -50,6 +65,31 @@ body {
   top: 35%;
 
   @media screen and (max-width:768px) {
-    top: 20%;
+    top: 25%;
   }
+}
+
+.nav-item {
+  font-family: "B612 Mono", monospace;
+  font-size: .85rem;
+  color: $dark;
+}
+
+.nav-link {
+  color: $secondary !important;
+}
+
+.nav-link:hover,
+.router-link-active.router-link-exact-active.nav-link {
+  color: $dark !important;
+  ;
+}
+
+.navbar-light .navbar-toggler {
+  color: $dark;
+  border-color: white !important;
+}
+
+button:focus {
+  outline: none;
 }
